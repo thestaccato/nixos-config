@@ -11,6 +11,9 @@ in
     ../modules/specialization/plasma.nix
   ];
 
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
