@@ -7,10 +7,10 @@
     ./vm-shared.nix
   ];
   
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/vda"; 
-  };
+  #boot.loader.grub = {
+  #  enable = true;
+  #  device = "/dev/vda"; 
+  #};
 
   # Network interface for a virtio NIC in QEMU/KVM. If `ip link` shows a
   # different name (e.g. enp6s0), adjust this.
