@@ -19,6 +19,11 @@ let
     jn = "jj new";
     jp = "jj git push";
     js = "jj st";
+
+    switch = "sudo nixos-rebuild switch --flake ${nixConfigPath}#host";
+    test = "sudo nixos-rebuild test --flake ${nixConfigPath}#host";
+    switch-vm = "sudo nixos-rebuild switch --flake ${nixConfigPath}#vm";
+    test-vm = "sudo nixos-rebuild test --flake ${nixConfigPath}#vm";
   };
 
 
@@ -99,6 +104,13 @@ in {
 
   programs.gpg.enable = true;
 
+  programs.starship = {
+    enable = true;
+
+    enableFishIntegration = true;
+    enableBashIntegration = true;
+  };
+
   programs.bash = {
     enable = true;
     shellOptions = [];
@@ -123,28 +135,37 @@ in {
 
   programs.fish = {
     enable = true;
-    shellAliases = shellAliases; 
+    shellAliases = shellAliases;
+    interactiveShellInit = ''
+      if status is-interactive
+        fastfetch
+      end
+    '';
+    functions.nixos-check = {
+      description = "Check the NixOS flake and configurations";
+      body = ''
+        nix flake check "$HOME/.config/nixos" --all-systems --no-build; or return 1
+
+        nix eval --raw \
+          "$HOME/.config/nixos#nixosConfigurations.host.config.system.build.toplevel.drvPath" \
+          >/dev/null; or return 1
+
+        nix eval --raw \
+          "$HOME/.config/nixos#nixosConfigurations.vm.config.system.build.toplevel.drvPath" \
+          >/dev/null; or return 1
+
+        echo "NixOS configurations are valid."
+      '';
+    };
   };
 
-  # programs.git = {
-  #   enable = true;
-  #   settings = {
-  #     user.name = "";
-  #     user.email = "";
-  #     branch.autosetuprebase = "always";
-  #     color.ui = true;
-  #     core.askPass = ""; # needs to be empty to use terminal for ask pass
-  #     credential.helper = "store"; # want to make this more secure
-  #     github.user = "amrahs";
-  #     push.default = "tracking";
-  #     init.defaultBranch = "main";
-  #     aliases = {
-  #       cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 -r git branch -d";
-  #       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-  #       root = "rev-parse --show-toplevel";
-  #     };
-  #   };
-  # };
+  programs.git = {
+    enable = true;
+    settings = {
+      user.name = "";
+      user.email = "";
+    };
+  };
 
   # programs.go = {
   #   enable = true;
