@@ -1,0 +1,226 @@
+format = """\
+[╭╴](fg:arrow)\
+$username\
+$os\
+$git_branch\
+(\
+    at \
+    $directory\
+)\
+$fill $cmd_duration $time\
+(\
+    via \
+    $python\
+    $conda\
+    $nodejs\
+    $c\
+    $cpp\
+    $golang\
+    $zig\
+    $rust\
+    $java\
+    $lua\
+    $haskell\
+)
+[╰─](fg:arrow)$character\
+"""
+# Add the modules you need
+
+# Disable the blank line at the start of the prompt
+add_newline = true
+
+palette = "normal"
+
+[palettes.normal]
+arrow = "#a89984"
+os = "#a89984"
+os_admin = "#a89984"
+directory = "#a89984"
+time = "#a89984"
+node = "#a9b665"
+git = "#e78a4e"
+git_status = "#a9b665"
+aws = "#e78a4e"
+python = "#d8a657"
+conda = "#a9b665"
+java = "#ea6962"
+rust = "#ea6962"
+clang = "#7daea3"
+cpp = "#89b482"
+golang = "#7daea3"
+zig = "#d8a657"
+lua = "#7daea3"
+nix = "#7daea3"
+haskell = "#d3869b"
+duration = "#ea6962"
+text_color = "#d4be98"
+text_light = "#1d2021"
+
+
+[username]
+style_user = 'bold os'
+style_root = 'bold os_admin'
+format = '[  $user](fg:$style) '
+disabled = false
+show_always = true
+
+[os]
+format = "on [($name)]($style) "
+style = "bold blue"
+disabled = true
+
+[os.symbols]
+Alpine = " "
+Arch = " "
+FreeBSD = " "
+Debian = " "
+EndeavourOS = " "
+Fedora = " "
+Gentoo = " "
+Linux = " "
+Macos = " "
+Manjaro = " "
+Mint = " "
+NixOS = " "
+openBSD = " "
+openSUSE = " "
+Pop = " "
+SUSE = " "
+Ubuntu = " "
+Void = " "
+Windows = " "
+
+[character]
+success_symbol = "[󰍟](fg:arrow)"
+error_symbol = "[󰍟](fg:red)"
+
+[directory]
+format = "[$path](bold $style)[$read_only]($read_only_style) "
+truncation_length = 2
+style = "fg:directory"
+read_only_style = "fg:directory"
+before_repo_root_style = "fg:directory"
+truncation_symbol = "… /"
+truncate_to_repo = true
+read_only ="  "
+
+[time]
+disabled = false
+format = "[󱑈 $time]($style) "
+time_format = "%H:%M"
+style = "bold fg:time"
+
+
+
+[cmd_duration]
+disabled = false
+format = "took [ $duration]($style) "
+style = "bold fg:duration"
+min_time = 500
+
+[git_branch]
+format = "via [$symbol$branch]($style) "
+style = "bold fg:git"
+symbol = " "
+
+[git_status]
+format = '[ $all_status$ahead_behind ]($style)'
+style = "fg:text_color bg:git"
+disabled = true
+
+[docker_context]
+disabled=false
+symbol = " "
+
+[package]
+disabled=false
+
+[fill]
+symbol = " "
+
+[nix_shell]
+format ="[ $symbol$version ]($style)"
+style = "bold fg:text_light"
+symbol = " "
+
+[aws]
+format ="[ $symbol$version ]($style)"
+style = "bold fg:text_light"
+symbol = " "
+
+[nodejs]
+format = "[ $symbol$version ]($style)"
+style = "bg:node fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[python]
+disabled=false
+format = '[ ${symbol}${pyenv_prefix}(${version})( \($virtualenv\)) ]($style)'
+symbol = " "
+version_format = "${raw}"
+style = "bg:python fg:text_light"
+
+[conda]
+format = "[ $symbol$environment ]($style)"
+style = "bg:conda fg:text_light"
+ignore_base = false
+disabled = false
+symbol = " "
+
+[java]
+format = "[ $symbol$version ]($style)"
+style = "bg:java fg:text_light"
+version_format = "${raw}"
+symbol = " "
+disabled = false
+
+[c]
+format = "[ $symbol($version(-$name)) ]($style)"
+style = "bg:clang fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[cpp]
+format = "[ $symbol($version(-$name)) ]($style)"
+style = "bg:cpp fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[rust]
+format ="[ $symbol$version ]($style)"
+style = "bg:rust fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[golang]
+format ="[ $symbol$version ]($style)"
+style = "bg:golang fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[zig]
+format ="[ $symbol$version ]($style)"
+style = "bg:zig fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false
+
+[lua]
+format ="[ $symbol$version ]($style)"
+style = "bg:lua fg:text_light"
+symbol = "󰢱 "
+version_format = "${raw}"
+disabled=false
+
+[haskell]
+format ="[ $symbol$version ]($style)"
+style = "bg:haskell fg:text_light"
+symbol = " "
+version_format = "${raw}"
+disabled=false

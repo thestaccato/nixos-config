@@ -3,6 +3,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  nixConfigPath = "${config.home.homeDirectory}/nixos-config";
+
   shellAliases = {
     ga = "git add";
     gc = "git commit";
@@ -22,8 +24,11 @@ let
 
     switch = "sudo nixos-rebuild switch --flake ${nixConfigPath}#host";
     test = "sudo nixos-rebuild test --flake ${nixConfigPath}#host";
+    boot = "sudo nixos-rebuild boot --flake ${nixConfigPath}#host";
     switch-vm = "sudo nixos-rebuild switch --flake ${nixConfigPath}#vm";
     test-vm = "sudo nixos-rebuild test --flake ${nixConfigPath}#vm";
+    boot-vm = "sudo nixos-rebuild boot --flake ${nixConfigPath}#vm";
+    cleanup = "sudo nix-collect-garbage -d";
   };
 
 
@@ -36,9 +41,8 @@ in {
 
   # Packages
   home.packages = with pkgs; [
-    adwaita-icon-theme
+    papirus-icon-theme
     foot
-    kitty
     tmux
     imagemagick
     fastfetch
@@ -47,12 +51,6 @@ in {
     zip
     unzip
     vlc
-    qemu_kvm
-    libvirt
-    virt-manager
-    kubernetes
-    kubectl
-    kompose
     cmatrix
     cliphist
     wl-clipboard
@@ -62,24 +60,22 @@ in {
     ripgrep
     wireshark
     #noctalia
-    #noctalia-greeter
     zathura
-    starship
     xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
     kdePackages.gwenview
-    kdePackages.ark
-    kdePackages.dolphin
     qt6.qtwayland
+    bibata-cursors
+    curl
+    gcc
+    gnumake
+    pkg-config
+    tree-sitter
   ];
 
-  #---------------------------------------------------------------------
   # Env vars and dotfiles
-  #---------------------------------------------------------------------
 
-  # home.sessionPath = [
-  #   "${gopath}/bin"
-  # ];
+  home.sessionPath = [];
 
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
@@ -88,19 +84,37 @@ in {
     EDITOR = "nvim"; 
   };
 
-  # home.file = {
-  #   ".gdbinit".source = ./gdbinit;
-  #   ".inputrc".source = ./inputrc;
-  # };
+  home.file = {
+    ".gdbinit".source = ./gdbinit;
+  };
 
-  # xdg.configFile = {
-  #   "i3/config".text = builtins.readFile ./i3;
-  #   "nvim/init.lua".force = true;
-  # };
+  xdg.configFile = {
+    "starship.toml".source = ./starship;
+    "hypr".source = ./hypr;
+    "nvim".source = ./nvim;
+    "fastfetch/config.jsonc".source = ./fastfetch;
+    "foot/foot.ini".source = ./foot;
+    "zathura/zathurarc".source = ./zathurarc;
+  };
 
-  #---------------------------------------------------------------------
+  xdg.desktopEntries.neovim = {
+    name = "Neovim";
+    genericName = "Text Editor";
+    comment = "Edit files";
+    exec = "footclient nvim %F";
+    terminal = false;
+    type = "Application"; 
+    icon = "nvim";
+    categories = [ "Development" "TextEditor" ];
+    mimeType = [
+      "text/plain"
+      "text/x-c"
+      "text/x-c++"
+      "text/x-python"
+    ];
+  };
+
   # Programs
-  #---------------------------------------------------------------------
 
   programs.gpg.enable = true;
 
@@ -115,23 +129,22 @@ in {
     enable = true;
     shellOptions = [];
     historyControl = [ "ignoredups" "ignorespace" ];
-    initExtra = builtins.readFile ./bashrc;
     shellAliases = shellAliases;
   };
 
-  # programs.direnv= {
-  #   enable = true;
-  #
-  #   config = {
-  #     whitelist = {
-  #       prefix= [
-  #         "$HOME/code/go/src/github.com/amrahs"
-  #       ];
-  #
-  #       exact = ["$HOME/.envrc"];
-  #     };
-  #   };
-  # };
+  programs.direnv= {
+    enable = true;
+
+    config = {
+      whitelist = {
+        prefix= [
+          "${config.home.homeDirectory}/code"
+        ];
+
+        exact = ["${config.home.homeDirectory}/.envrc"];
+      };
+    };
+  };
 
   programs.fish = {
     enable = true;
@@ -141,54 +154,51 @@ in {
         fastfetch
       end
     '';
-    functions.nixos-check = {
-      description = "Check the NixOS flake and configurations";
-      body = ''
-        nix flake check "$HOME/.config/nixos" --all-systems --no-build; or return 1
+    functions = {
+      fish_greeting = {
+        body = "";
+      };
+      hl = {
+        body = ''
+          start-hyprland $argv
+        '';
+      };
+      nixos-check = {
+        body = ''
+          nix flake check "$HOME/nixos-config" --all-systems --no-build; or return 1
 
-        nix eval --raw \
-          "$HOME/.config/nixos#nixosConfigurations.host.config.system.build.toplevel.drvPath" \
-          >/dev/null; or return 1
+          nix eval --raw \
+            "$HOME/nixos-config#nixosConfigurations.host.config.system.build.toplevel.drvPath" \
+            >/dev/null; or return 1
 
-        nix eval --raw \
-          "$HOME/.config/nixos#nixosConfigurations.vm.config.system.build.toplevel.drvPath" \
-          >/dev/null; or return 1
+          nix eval --raw \
+            "$HOME/nixos-config#nixosConfigurations.vm.config.system.build.toplevel.drvPath" \
+            >/dev/null; or return 1
 
-        echo "NixOS configurations are valid."
-      '';
-    };
+          echo "NixOS configurations are valid."
+        '';
+      };
+    }; 
   };
 
   programs.git = {
     enable = true;
-    settings = {
-      user.name = "";
-      user.email = "";
+    signing = {
+      key = "E16C803AD20A5A22";
+      signByDefault = true;
     };
-  };
-
-  # programs.go = {
-  #   enable = true;
-  #   env = { 
-  #     GOPATH = gopath;
-  #     GOPRIVATE = [ "github.com/amrahs" ];
-  #   };
-  # };
+    settings = {
+      user.name = "thestaccato";
+      user.email = "296458454+thestaccato@users.noreply.github.com";
+    };
+  }; 
 
   programs.jujutsu = {
     enable = true;
   };
- 
-  programs.kitty = {
-    enable = true;
-    extraConfig = builtins.readFile ./kitty;
-  };
-
+  
   programs.neovim = {
     enable = true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    withPython3 = true;
-    withRuby = true;
     initLua = ''
       require("config.lazy")
     '';
