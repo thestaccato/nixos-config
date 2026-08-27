@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: {
+{ ... }: {
   networking.networkmanager = {
     enable = true;
     dns = "systemd-resolved";

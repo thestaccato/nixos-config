@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: {
+{ pkgs, ... }: {
 
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.extraConfig = ''

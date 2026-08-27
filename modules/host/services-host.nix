@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: {
+{ ... }: {
   #services.kubernetes.roles = ["master" "node"];
   services.hardware.openrgb.enable = true;
   services.tlp = {
