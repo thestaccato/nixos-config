@@ -22,9 +22,9 @@ let
     jp = "jj git push";
     js = "jj st";
 
-    switch = "sudo nixos-rebuild switch --flake ${nixConfigPath}#host";
-    test = "sudo nixos-rebuild test --flake ${nixConfigPath}#host";
-    boot = "sudo nixos-rebuild boot --flake ${nixConfigPath}#host";
+    nixos-switch = "sudo nixos-rebuild switch --flake ${nixConfigPath}#host";
+    nixos-test = "sudo nixos-rebuild test --flake ${nixConfigPath}#host";
+    nixos-boot = "sudo nixos-rebuild boot --flake ${nixConfigPath}#host";
     switch-vm = "sudo nixos-rebuild switch --flake ${nixConfigPath}#vm";
     test-vm = "sudo nixos-rebuild test --flake ${nixConfigPath}#vm";
     boot-vm = "sudo nixos-rebuild boot --flake ${nixConfigPath}#vm";
