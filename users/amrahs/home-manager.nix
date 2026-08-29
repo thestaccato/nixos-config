@@ -75,6 +75,7 @@ in {
     gnumake
     pkg-config
     tree-sitter
+    fzf
   ];
 
   # Env vars and dotfiles
