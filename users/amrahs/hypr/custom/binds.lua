@@ -1,36 +1,49 @@
 local term = "footclient"
 local file = "thunar"
 local web = "firefox"
+local menu = "fuzzel"
+local bar = "waybar"
+local lock = "hyprlock"
 
 local mod = "SUPER"
 local mod_a = mod .. " + ALT"
 local mod_c = mod .. " + CTRL"
 local mod_s = mod .. " + SHIFT"
 
-hl.bind(mod .. " + C", hl.dsp.exec_cmd("noctalia msg panel-toggle clipboard"))
-hl.bind(mod .. " + W", hl.dsp.exec_cmd("noctalia msg window-switcher"))
+
+hl.bind(mod .. " + C",
+  hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu -d $'\t' --with-nth 2 | cliphist decode | wl-copy"))
+
+hl.bind(mod .. " + W", hl.dsp.exec_cmd(term .. " -e " .. "active-windows"))
+
+
 hl.bind(mod .. " + M", hl.dsp.exec_cmd("noctalia msg panel-toggle control-center"))
-hl.bind(mod .. " + B", hl.dsp.exec_cmd("noctalia msg panel-toggle control-center bluetooth"))
-hl.bind(mod .. " + N", hl.dsp.exec_cmd("noctalia msg panel-toggle control-center network"))
-hl.bind(mod .. " + O", hl.dsp.exec_cmd("noctalia msg panel-toggle session"))
+hl.bind(mod .. " + B", hl.dsp.exec_cmd(term .. " -e " .. "bluetooth-menu"))
+hl.bind(mod .. " + N", hl.dsp.exec_cmd(term .. " -e " .. "network-menu"))
+hl.bind(mod .. " + O", hl.dsp.exec_cmd(term .. " -e " .. "power-menu"))
+
 hl.bind(mod .. " + U", hl.dsp.exec_cmd(term .. " -e " .. "system-update"))
+
 hl.bind("CTRL" .. " + SHIFT + " .. "S", hl.dsp.exec_cmd("noctalia msg screenshot-region"))
 hl.bind("PRINT", hl.dsp.exec_cmd("noctalia msg screenshot-fullscreen"))
+
 hl.bind(mod_s .. " + Backspace", hl.dsp.exec_cmd("noctalia msg session lock-and-suspend"))
 hl.bind(mod .. " + Backspace", hl.dsp.exec_cmd("noctalia msg session lock"))
+
 hl.bind(mod .. " + RETURN", hl.dsp.exec_cmd(term))
-hl.bind(mod .. " + D", hl.dsp.exec_cmd("noctalia msg panel-toggle launcher"))
+hl.bind(mod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mod .. " + S", hl.dsp.exec_cmd("noctalia msg settings-toggle"))
 hl.bind(mod .. " + F", hl.dsp.exec_cmd(web))
 hl.bind("ALT" .. " + F", hl.dsp.exec_cmd(web .. " --private-window "))
 hl.bind(mod .. " + E", hl.dsp.exec_cmd(file))
+
 local closeWindowBind = hl.bind(mod .. " + Q", hl.dsp.window.close())
 local fullscreenWindowBind = hl.bind("ALT" .. " + RETURN",
   hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 
 hl.bind(mod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
+hl.bind(mod .. " + J", hl.dsp.layout("togglesplit"))
 
 -- Move focus with mod + arrow keys
 hl.bind(mod .. " + left", hl.dsp.focus({ direction = "left" }))

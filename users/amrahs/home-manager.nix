@@ -55,16 +55,20 @@ in {
     cliphist
     wl-clipboard
     pavucontrol
+    playerctl
+    mako
+    waybar
+    fuzzel
     brave
     librewolf
     ripgrep
     wireshark
-    #noctalia
     zathura
     xdg-desktop-portal-gtk
     xdg-desktop-portal-hyprland
     kdePackages.gwenview
     qt6.qtwayland
+    brightnessctl
     bibata-cursors
     curl
     gcc
@@ -94,6 +98,10 @@ in {
     "nvim".source = ./nvim;
     "fastfetch/config.jsonc".source = ./fastfetch;
     "foot/foot.ini".source = ./foot;
+    "fuzzel/fuzzel.ini".source = ./fuzzel;
+    "mako/config".source = ./mako;
+    "waybar".source = ./waybar;
+    "tmux/tmux.conf".source = ./tmux;
     "zathura/zathurarc".source = ./zathurarc;
   };
 

@@ -21,7 +21,7 @@ hl.config({
     force_default_wallpaper  = 0,
     disable_hyprland_logo    = true,
     disable_splash_rendering = true,
-    font_family              = "Inter",
+    font_family              = "sans-serif",
     animate_manual_resizes   = true,
     focus_on_activate        = true,
     middle_click_paste       = false,

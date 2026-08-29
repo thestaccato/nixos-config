@@ -72,12 +72,6 @@ hl.window_rule({
 })
 
 
-hl.workspace_rule({ workspace = "1", monitor = "eDP-1", persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "eDP-1", persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "eDP-1", persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "eDP-1", persistent = true })
-hl.workspace_rule({ workspace = "5", monitor = "eDP-1", persistent = true })
-
 
 -- local overlayLayerRule = hl.layer_rule({
 --     name  = "no-anim-overlay",
@@ -88,6 +82,11 @@ hl.workspace_rule({ workspace = "5", monitor = "eDP-1", persistent = true })
 
 hl.layer_rule({
   match        = { namespace = "waybar" },
+  blur         = true,
+  ignore_alpha = 0,
+})
+hl.layer_rule({
+  match        = { namespace = "fuzzel" },
   blur         = true,
   ignore_alpha = 0,
 })
