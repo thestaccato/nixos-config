@@ -60,7 +60,7 @@ text_light = "#1d2021"
 [username]
 style_user = 'bold os'
 style_root = 'bold os_admin'
-format = '[  $user](fg:$style) '
+format = '[  $user](fg:$style) '
 disabled = false
 show_always = true
 
@@ -140,12 +140,12 @@ symbol = " "
 
 [nix_shell]
 format ="[ $symbol$version ]($style)"
-style = "bold fg:text_light"
+style = "bold fg:nix"
 symbol = " "
 
 [aws]
 format ="[ $symbol$version ]($style)"
-style = "bold fg:text_light"
+style = "bold fg:aws"
 symbol = " "
 
 [nodejs]
